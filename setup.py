@@ -61,15 +61,16 @@ setup(name='penelope.trac',
       zip_safe=False,
       test_suite='penelope.trac',
       install_requires = requires,
-      entry_points = """\
-      [console_scripts]
-      auth_wsgi = penelope.trac.auth_wsgi:main
-
-      [trac.plugins]
-      trac.por = penelope.trac.plugins
-      trac.por.users = penelope.trac.user
-      trac.por.communication = penelope.trac.communication
-      trac.por.workflow = penelope.trac.workflow
-      """,
+      entry_points = {
+          'console_scripts': [
+            'auth_wsgi = penelope.trac.auth_wsgi:main',
+          ],
+          'trac.plugins': [
+            'trac.por = penelope.trac.plugins',
+            'trac.por.users = penelope.trac.user',
+            'trac.por.communication = penelope.trac.communication',
+            ' trac.por.workflow = penelope.trac.workflow',
+          ]
+      },
       **extra
       )
