@@ -13,7 +13,6 @@ requires = [
     'distribute',
     'mandrill',
     'penelope.core',
-    'penelope.core',
     'privatecomments',
     'python-creole',
     'sensitivetickets>=0.21',
