@@ -37,7 +37,7 @@ try:
             }), 
         ] 
         extra['message_extractors'] = { 
-            'trac/por': extractors, 
+            'penelope/trac': extractors, 
         }
 except ImportError: 
     pass 
@@ -55,7 +55,7 @@ setup(name='penelope.trac',
       author_email='penelopedev@redturtle.it',
       url='http://getpenelope.github.com',
       keywords='web wsgi bfg pylons pyramid',
-      namespace_packages=['por'],
+      namespace_packages=['penelope'],
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
@@ -66,10 +66,10 @@ setup(name='penelope.trac',
       auth_wsgi = penelope.trac.auth_wsgi:main
 
       [trac.plugins]
-      trac.por = trac.por.plugins
-      trac.por.users = trac.por.user
-      trac.por.communication = trac.por.communication
-      trac.por.workflow = trac.por.workflow
+      trac.por = penelope.trac.plugins
+      trac.por.users = penelope.trac.user
+      trac.por.communication = penelope.trac.communication
+      trac.por.workflow = penelope.trac.workflow
       """,
       **extra
       )
