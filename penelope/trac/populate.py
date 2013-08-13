@@ -337,7 +337,7 @@ def add_trac_to_project(application,
 
     tracenv.config.set('attachment', 'max_size', attachment_max_size)
 
-    tracenv.config.set('components', 'trac.por.*', 'enabled')
+    tracenv.config.set('components', 'penelope.trac.*', 'enabled')
     tracenv.config.set('components', 'themeengine.admin.*', 'enabled')
     tracenv.config.set('components', 'themeengine.api.*', 'enabled')
     tracenv.config.set('components', 'themeengine.web_ui.*', 'enabled')
@@ -432,7 +432,7 @@ def add_trac_to_project(application,
     tracenv.config.set('metanav', 'logout', 'disabled')
 
     # permissions
-    tracenv.config.set('components', 'trac.por.users.*', 'enabled')
+    tracenv.config.set('components', 'penelope.trac.users.*', 'enabled')
     tracenv.config.set('trac', 'permission_store', 'PorPermissionStore')
     tracenv.config.set('trac', 'show_email_addresses', 'true')
 

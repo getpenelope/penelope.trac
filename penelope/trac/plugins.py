@@ -132,6 +132,7 @@ class PorFanstatic(Component):
         # fanstatic
         dashboard.need()
         add_script(req, 'penelope/por.js')
+        add_stylesheet(req, 'penelope/por.css')
         field_descriptions = dict([(field['name'], field['descriptions']) \
             for field in TicketSystem(self.env).get_custom_fields() \
                 if field.get('descriptions')])

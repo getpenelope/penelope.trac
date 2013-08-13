@@ -66,10 +66,10 @@ setup(name='penelope.trac',
             'auth_wsgi = penelope.trac.auth_wsgi:main',
           ],
           'trac.plugins': [
-            'trac.por = penelope.trac.plugins',
-            'trac.por.users = penelope.trac.user',
-            'trac.por.communication = penelope.trac.communication',
-            ' trac.por.workflow = penelope.trac.workflow',
+            'penelope.trac = penelope.trac.plugins',
+            'penelope.trac.users = penelope.trac.user',
+            'penelope.trac.communication = penelope.trac.communication',
+            'penelope.trac.workflow = penelope.trac.workflow',
           ]
       },
       **extra

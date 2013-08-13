@@ -5,7 +5,7 @@ from trac.util.translation import domain_functions
 
 
 _, tag_, N_, add_tracpor_domain = \
-            domain_functions('trac.por', ('_', 'tag_', 'N_', 'add_domain'))
+            domain_functions('penelope.trac', ('_', 'tag_', 'N_', 'add_domain'))
 
 
 def add_domains(env_path):
