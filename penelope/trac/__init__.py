@@ -1,1 +1,1 @@
-#
+import monkey; monkey
