@@ -26,4 +26,5 @@ class TracXmlProxy(ServerProxy):
     def __init__(self, application_uri, request=None, **kwargs):
         if not kwargs.get('transport') and request:
             kwargs['transport'] = ProxyTransport(request)
-        ServerProxy.__init__(self, '/'.join([application_uri, 'login', 'rpc']), **kwargs)
+        uri = '/'.join([application_uri, 'login', 'rpc'])
+        ServerProxy.__init__(self, 'http://%s:%s/%s' % (request.environ['SERVER_NAME'], request.environ['SERVER_PORT'], uri) , **kwargs)
