@@ -1,4 +1,5 @@
-from xmlrpclib import ServerProxy, Transport
+import _socket
+from xmlrpclib import ServerProxy, Transport, Error
 
 
 class ProxyTransport(Transport):
@@ -17,7 +18,10 @@ class ProxyTransport(Transport):
             connection.putheader("Content-Type", "text/xml")
             connection.putheader("Content-Length", str(len(request_body)))
             connection.putheader("Cookie", self.orig_request.headers['Cookie'])
-            connection.endheaders()
+            try:
+                connection.endheaders()
+            except _socket.gaierror:
+                raise Error('DNS error')
         if request_body:
             connection.send(request_body)
 

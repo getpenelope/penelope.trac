@@ -2,6 +2,7 @@
 ----------------
 
 - fix problem with proxy in front for xml-rpc [amleczko]
+- make sure the dns errors are handled by xmlrpc [amleczko]
 
 
 1.0 (2013-08-13)
