@@ -1,7 +1,7 @@
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- refactor popen calls [amleczko]
 
 
 1.1 (2013-09-02)

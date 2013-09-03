@@ -3,7 +3,6 @@ import os
 import stat
 import lipsum
 import random
-import tempfile
 import subprocess
 from datetime import date
 
@@ -43,23 +42,13 @@ def get_reports(**kwargs):
 
 
 def _execute(cmd):
-    handler, fname = tempfile.mkstemp()
-    f = open(fname, 'w')
-    try:
         try:
-            ret = subprocess.call(cmd, stdout=f, stderr=f)
+            ret = subprocess.check_call(cmd, stderr=subprocess.STDOUT)
         except OSError, e:
             raise Exception('The cmd %r could not be executed, %r'
                             'full cmd args are: %r'
                                 % (cmd[0], e, ' '.join(cmd)))
-        if ret != 0:
-            raise Exception('Error while executing %r' % ' '.join(cmd))
-    finally:
-        f.close()
-        f = open(fname)
-        f.close()
-        os.remove(fname)
-    return ret
+        return ret
 
 
 POST_COMMIT_HOOK = """#!/bin/sh
