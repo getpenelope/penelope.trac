@@ -85,7 +85,7 @@ def add_svn_to_project(application):
                 idx = idx and (idx+1) or 1
                 svnname = None
 
-        _execute(['svnadmin', 'create', svn_path])
+        _execute(['svnadmin', '--config-dir', '/etc/subversion', 'create', svn_path])
 
     for trac in project.tracs:
         tracname = str(trac.trac_name)

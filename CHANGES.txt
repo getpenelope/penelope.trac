@@ -3,7 +3,6 @@
 
 - refactor popen calls [amleczko]
 
-
 1.1 (2013-09-02)
 ----------------
 
