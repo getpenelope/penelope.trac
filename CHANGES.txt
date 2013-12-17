@@ -2,6 +2,7 @@
 ----------------
 
 - refactor popen calls [amleczko]
+- fix problem with XML transport [amleczko]
 
 1.1 (2013-09-02)
 ----------------
