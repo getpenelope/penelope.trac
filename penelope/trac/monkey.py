@@ -217,10 +217,12 @@ def fix_customer_request_dropdown():
         except (AttributeError, ValueError):
             return -1
 
-    def prepare_customerrequest_options(field):
+    def prepare_customerrequest_options(field, newticket):
         qry = DBSession.query(CustomerRequest)
         options = field['options']
         customer_requests = [qry.get(op) for op in options]
+        if newticket:
+            customer_requests = [cr for cr in customer_requests if cr.workflow_state in ['created', 'estimated']]
 
         groups = {}
         NO_CONTRACT = 'No contract available'
@@ -245,7 +247,11 @@ def fix_customer_request_dropdown():
         ret = _prepare_fields(self, req, ticket)
         for field in ret:
             if field['name'] == 'customerrequest':
-                prepare_customerrequest_options(field)
+                if not ticket.id:
+                    newticket = True
+                else:
+                    newticket = False
+                prepare_customerrequest_options(field, newticket)
 
         return ret
 

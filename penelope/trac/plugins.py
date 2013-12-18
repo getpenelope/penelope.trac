@@ -452,6 +452,37 @@ class CustomerTicketsPolicy(Component):
         return stream
 
 
+class InactiveCRTicketsPolicy(Component):
+    implements(ITemplateStreamFilter)
+
+    # ITemplateStreamFilter methods
+    def filter_stream(self, req, method, filename, stream, data):
+        """Return a filtered Genshi event stream, or the original unfiltered
+        stream if no match.
+
+        `req` is the current request object, `method` is the Genshi render
+        method (xml, xhtml or text), `filename` is the filename of the template
+        to be rendered, `stream` is the event stream and `data` is the data for
+        the current template.
+
+        See the Genshi documentation for more information.
+        """
+        if filename == 'ticket.html':
+            ticket = data['ticket']
+            if ticket.exists:
+                if req.perm.has_permission('SENSITIVE_VIEW'):
+                    qry = DBSession().query(CustomerRequest)
+                    if not qry.get(ticket.values.get('customerrequest')).active:
+                        div = tag.div(
+                            tag.div(
+                                tag.strong(u'Heads up! '),
+                                tag.span(u'This ticket is assigned to an inactive customer request.',),
+                                class_="alert alert-info"),
+                            id='inactive_cr_ticket')
+                        return stream | Transformer("//div[@id='ticket']").before(div)
+        return stream
+
+
 class SensitiveTicketsPolicy(Component):
     implements(ITemplateStreamFilter)
 
