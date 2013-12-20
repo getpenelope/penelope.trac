@@ -1,4 +1,4 @@
-1.2 (unreleased)
+1.2 (2013-12-20)
 ----------------
 
 - refactor popen calls [amleczko]
