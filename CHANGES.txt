@@ -1,8 +1,7 @@
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- enable trac search for CUSTOMER role [amleczko]
 
 1.2 (2013-12-20)
 ----------------
