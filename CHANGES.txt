@@ -2,6 +2,7 @@
 ------------------
 
 - CSS fixes [amleczko]
+- new ticket workflow state [amleczko]
 
 
 1.2.1 (2013-12-23)

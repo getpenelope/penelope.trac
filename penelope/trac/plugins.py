@@ -28,6 +28,8 @@ from trac.mimeview import Context
 from themeengine.api import ThemeBase
 from tracrpc.api import IXMLRPCHandler
 from trac.ticket.model import Milestone
+from trac.ticket.default_workflow import ConfigurableTicketWorkflow
+from trac.ticket.api import ITicketActionController
 from trac.web.api import IRequestFilter, ITemplateStreamFilter, IRequestHandler
 from trac.ticket.api import TicketSystem
 from trac.web.chrome import ITemplateProvider, add_script, add_script_data, add_stylesheet, Chrome
@@ -750,3 +752,92 @@ class MandrillEmailSender(Component):
         mandrill_client.messages.send_template(template_name='ticket',
                                                template_content=[],
                                                message=message)
+
+
+class TicketWorkflowOpBase(Component):
+    """Abstract base class for 'simple' ticket workflow operations."""
+
+    implements(ITicketActionController)
+    abstract = True
+
+    _op_name = None # Must be specified.
+
+    def get_configurable_workflow(self):
+        controllers = TicketSystem(self.env).action_controllers
+        for controller in controllers:
+            if isinstance(controller, ConfigurableTicketWorkflow):
+                return controller
+        return ConfigurableTicketWorkflow(self.env)
+
+    # ITicketActionController methods
+
+    def get_ticket_actions(self, req, ticket):
+        """Finds the actions that use this operation"""
+        controller = self.get_configurable_workflow()
+        return controller.get_actions_by_operation_for_req(req, ticket,
+                                                           self._op_name)
+
+    def get_all_status(self):
+        """Provide any additional status values"""
+        # We don't have anything special here; the statuses will be recognized
+        # by the default controller.
+        return []
+
+    # This should most likely be overridden to be more functional
+    def render_ticket_action_control(self, req, ticket, action):
+        """Returns the action control"""
+        actions = self.get_configurable_workflow().actions
+        label = actions[action]['name']
+        return (label, tag(''), '')
+
+    def get_ticket_changes(self, req, ticket, action):
+        """Must be implemented in subclasses"""
+        raise NotImplementedError
+
+    def apply_action_side_effects(self, req, ticket, action):
+        """No side effects"""
+        pass
+
+
+class TicketWorkflowOpOwnerPrevious(TicketWorkflowOpBase):
+    """Sets the owner to the previous owner
+
+    Don't forget to add the `TicketWorkflowOpOwnerPrevious` to the workflow
+    option in [ticket].
+    If there is no workflow option, the line will look like this:
+
+    workflow = ConfigurableTicketWorkflow,TicketWorkflowOpOwnerPrevious
+    """
+
+    _op_name = 'set_owner_to_previous'
+
+    # ITicketActionController methods
+
+    def render_ticket_action_control(self, req, ticket, action):
+        """Returns the action control"""
+        actions = self.get_configurable_workflow().actions
+        label = actions[action]['name']
+        new_owner = self._new_owner(ticket)
+        if new_owner:
+            hint = 'The owner will change to %s' % new_owner
+        else:
+            hint = 'The owner will be deleted.'
+        control = tag('')
+        return (label, control, hint)
+
+    def get_ticket_changes(self, req, ticket, action):
+        """Returns the change of owner."""
+        return {'owner': self._new_owner(ticket)}
+
+    def _new_owner(self, ticket):
+        """Determines the new owner"""
+        db = self.env.get_db_cnx()
+        cursor = db.cursor()
+        cursor.execute("SELECT oldvalue FROM ticket_change WHERE ticket=%s " \
+                       "AND field='owner' ORDER BY -time", (ticket.id, ))
+        row = cursor.fetchone()
+        if row:
+            owner = row[0]
+        else: # The owner has never changed.
+            owner = ticket['owner']
+        return owner
