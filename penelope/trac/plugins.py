@@ -834,7 +834,7 @@ class TicketWorkflowOpOwnerPrevious(TicketWorkflowOpBase):
         db = self.env.get_db_cnx()
         cursor = db.cursor()
         cursor.execute("SELECT oldvalue FROM ticket_change WHERE ticket=%s " \
-                       "AND field='owner' ORDER BY -time", (ticket.id, ))
+                       "AND field='owner' AND oldvalue != '' ORDER BY -time", (ticket.id, ))
         row = cursor.fetchone()
         if row:
             owner = row[0]
