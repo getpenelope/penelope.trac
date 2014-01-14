@@ -526,3 +526,7 @@ body #field-customerrequest_chzn :link:hover
   border-bottom-style: solid;
   border-bottom-width: 1px;
 }
+
+#propertyform #field-cc{
+  width: 350px;
+}
