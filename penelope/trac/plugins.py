@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import redis
 import datetime
 import json
 import operator
@@ -9,6 +10,7 @@ import urllib
 import mandrill
 import sqlalchemy.orm.exc
 
+from json import dumps
 from pytz import timezone
 from genshi.builder import tag
 from genshi.core import TEXT
@@ -29,6 +31,7 @@ from themeengine.api import ThemeBase
 from tracrpc.api import IXMLRPCHandler
 from trac.ticket.model import Milestone
 from trac.ticket.default_workflow import ConfigurableTicketWorkflow
+from trac.ticket.api import ITicketChangeListener
 from trac.ticket.api import ITicketActionController
 from trac.web.api import IRequestFilter, ITemplateStreamFilter, IRequestHandler
 from trac.ticket.api import TicketSystem
@@ -841,3 +844,26 @@ class TicketWorkflowOpOwnerPrevious(TicketWorkflowOpBase):
         else: # The owner has never changed.
             owner = ticket['owner']
         return owner
+
+
+class TicketChangeProducer(Component):
+    implements(ITicketChangeListener)
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def realms(self):
+        yield 'ticket'
+
+    def ticket_created(self, ticket):
+        pass
+
+    def ticket_changed(self, ticket, comment, author, old_values):
+        r = redis.StrictRedis()
+        value = dict([(a, ticket.values.get(a)) for a in ('summary', 'owner', 'customerrequest', 'priority')])
+        id_ = '{trac_id}#{ticket_id}'.format(trac_id=self.env.config['por-dashboard'].get('project-id'),
+                                             ticket_id=ticket.id)
+        r.publish('*', dumps({'event': 'ticket_changed', 'data': {id_: value}}))
+
+    def ticket_deleted(self, ticket):
+        pass
