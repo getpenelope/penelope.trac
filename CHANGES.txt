@@ -1,7 +1,7 @@
 1.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- include feedly [amleczko]
 
 
 1.2.3 (2014-01-29)

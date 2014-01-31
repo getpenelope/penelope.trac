@@ -16,6 +16,7 @@ requires = [
     'privatecomments',
     'python-creole',
     'sensitivetickets>=0.21',
+    'setuptools',
     'Trac',
     'TracDynamicFields',
     'TracThemeEngine>=2.0',

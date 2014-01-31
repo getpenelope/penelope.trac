@@ -846,24 +846,48 @@ class TicketWorkflowOpOwnerPrevious(TicketWorkflowOpBase):
         return owner
 
 
-class TicketChangeProducer(Component):
+class TicketChangePublisher(Component):
     implements(ITicketChangeListener)
 
     def __init__(self, *args, **kwargs):
         pass
 
-    def realms(self):
-        yield 'ticket'
-
-    def ticket_created(self, ticket):
-        pass
-
-    def ticket_changed(self, ticket, comment, author, old_values):
+    def notify_redis(self, ticket):
         r = redis.StrictRedis()
         value = dict([(a, ticket.values.get(a)) for a in ('summary', 'owner', 'customerrequest', 'priority')])
         id_ = '{trac_id}#{ticket_id}'.format(trac_id=self.env.config['por-dashboard'].get('project-id'),
                                              ticket_id=ticket.id)
         r.publish('*', dumps({'event': 'ticket_changed', 'data': {id_: value}}))
+
+    def notify_feedly(self, ticket, comment, author):
+        from penelope.core.activity_stream import add_activity
+
+        users_to_notify = set()
+        users_to_notify.add(ticket.values.get('reporter'))
+        users_to_notify.add(ticket.values.get('owner'))
+        try:
+            users_to_notify.remove(author)
+        except KeyError:
+            pass
+
+        absolute_path = '/trac/{trac_id}/ticket/{ticket_id}'.format(ticket_id=ticket.id, trac_id=self.env.config['por-dashboard'].get('project-id'))
+        message = "Ticket #{ticket} has been {comment} in {trac_name}.".format(ticket=ticket.id, comment=comment, trac_name=self.config['project'].get('name'))
+        created_by = author
+        user_ids = []
+
+        for email in users_to_notify:
+            user_ids.append(DBSession.query(User.id).filter(User.email==email).one().id)
+        add_activity(user_ids, message, absolute_path, created_by)
+
+    def realms(self):
+        yield 'ticket'
+
+    def ticket_created(self, ticket):
+        self.notify_feedly(ticket, 'created', ticket.values.get('reporter'))
+
+    def ticket_changed(self, ticket, comment, author, old_values):
+        self.notify_redis(ticket)
+        self.notify_feedly(ticket, 'changed', author)
 
     def ticket_deleted(self, ticket):
         pass
