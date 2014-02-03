@@ -41,7 +41,7 @@ $(document).ready(function() {
               // attach the trac menu to the last left-aligned navigation menu
               $('#bootstrap-navbar').html($rt.find('div.navbar-inner'));
               $('#bootstrap-navbar .dropdown-toggle').dropdown();
-              angular.bootstrap($('#notification_ng_app'), ['feedly']);
+              angular.bootstrap($('#notification_ng_app'), ['penelope']);
 
               // replaces the footer and logo
               $('footer.footer').replaceWith($rt.find('footer.footer'));
