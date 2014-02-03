@@ -1,7 +1,7 @@
 1.2.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- fixes for angular integration [amleczko]
 
 
 1.2.4 (2014-01-31)
