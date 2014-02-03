@@ -10,6 +10,7 @@ import urllib
 import mandrill
 import sqlalchemy.orm.exc
 
+from redis.exceptions import ConnectionError
 from json import dumps
 from pytz import timezone
 from genshi.builder import tag
@@ -820,7 +821,7 @@ class TicketWorkflowOpOwnerPrevious(TicketWorkflowOpBase):
         """Returns the action control"""
         actions = self.get_configurable_workflow().actions
         label = actions[action]['name']
-        new_owner = self._new_owner(ticket)
+        new_owner = self._new_owner(ticket, req.authname)
         if new_owner:
             hint = 'The owner will change to %s' % new_owner
         else:
@@ -830,9 +831,9 @@ class TicketWorkflowOpOwnerPrevious(TicketWorkflowOpBase):
 
     def get_ticket_changes(self, req, ticket, action):
         """Returns the change of owner."""
-        return {'owner': self._new_owner(ticket)}
+        return {'owner': self._new_owner(ticket, req.authname)}
 
-    def _new_owner(self, ticket):
+    def _new_owner(self, ticket, authname):
         """Determines the new owner"""
         db = self.env.get_db_cnx()
         cursor = db.cursor()
@@ -842,7 +843,9 @@ class TicketWorkflowOpOwnerPrevious(TicketWorkflowOpBase):
         if row:
             owner = row[0]
         else: # The owner has never changed.
-            owner = ticket['owner']
+            owner = ticket['reporter']
+        if owner == authname:
+            owner = ticket['reporter']
         return owner
 
 
@@ -857,7 +860,10 @@ class TicketChangePublisher(Component):
         value = dict([(a, ticket.values.get(a)) for a in ('summary', 'owner', 'customerrequest', 'priority')])
         id_ = '{trac_id}#{ticket_id}'.format(trac_id=self.env.config['por-dashboard'].get('project-id'),
                                              ticket_id=ticket.id)
-        r.publish('*', dumps({'event': 'ticket_changed', 'data': {id_: value}}))
+        try:
+            r.publish('*', dumps({'event': 'ticket_changed', 'data': {id_: value}}))
+        except ConnectionError:
+            pass
 
     def notify_feedly(self, ticket, comment, author):
         from penelope.core.activity_stream import add_activity
@@ -880,7 +886,10 @@ class TicketChangePublisher(Component):
                 user_ids.append(DBSession.query(User.id).filter(User.email==email).one().id)
             except sqlalchemy.orm.exc.NoResultFound:
                 pass
-        add_activity(user_ids, message, absolute_path, created_by)
+        try:
+            add_activity(user_ids, message, absolute_path, created_by)
+        except ConnectionError:
+            pass
 
     def realms(self):
         yield 'ticket'
