@@ -876,7 +876,10 @@ class TicketChangePublisher(Component):
         user_ids = []
 
         for email in users_to_notify:
-            user_ids.append(DBSession.query(User.id).filter(User.email==email).one().id)
+            try:
+                user_ids.append(DBSession.query(User.id).filter(User.email==email).one().id)
+            except sqlalchemy.orm.exc.NoResultFound:
+                pass
         add_activity(user_ids, message, absolute_path, created_by)
 
     def realms(self):
