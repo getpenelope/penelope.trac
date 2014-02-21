@@ -2,6 +2,7 @@
 ------------------
 
 - fix quick reply plugin [amleczko]
+- fixes for populate script [amleczko]
 
 
 1.2.5 (2014-02-03)

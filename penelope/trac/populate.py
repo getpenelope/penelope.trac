@@ -530,7 +530,6 @@ def add_trac_to_project(application,
     tracenv = Environment(trac_path)
     for ticket in tickets:
         # in this moment the customer request has a proper id
-        ticket['customerrequest'] = ticket['customerrequest'].id
         ticket['status'] = 'new'
         t = Ticket(tracenv)
         t.populate(ticket)
