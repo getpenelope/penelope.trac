@@ -28,9 +28,8 @@ class TicketWorkflowGuards(Component):
         if ticket['milestone'] == '':
             errors.append(('milestone', 'Milestone cannot be empty'))
 
-        if req.perm.has_permission('SENSITIVE_VIEW'):
-            if ticket['type'] == 'defect' and ticket['issuetype'] == '':
-                errors.append(('issuetype', 'Devi specificare la natura del problema se si tratta di un difetto'))
+        if ticket['type'] == 'defect' and ticket['issuetype'] == '':
+            errors.append(('issuetype', 'Devi specificare la natura del problema se si tratta di un difetto'))
 
         if state == 'closed' and ticket['resolution'] in ('fixed',):
             if ticket['qa1'] == 'non attuata':
