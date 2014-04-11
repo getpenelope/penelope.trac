@@ -207,7 +207,7 @@ class PorModifySimple(Component):
             ('qa1', ''),
             ('qa2', ''),
             ('fasesviluppo', ''),
-            ('issuetype', hidden_cls),
+            ('issuetype', ''),
             ('esogeno', hidden_cls),
             ('version', hidden_cls),
             ('component', hidden_cls),

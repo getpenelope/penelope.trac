@@ -1,7 +1,7 @@
 1.2.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- make sure issuetype field is visible to customers [amleczko]
 
 
 1.2.6 (2014-02-21)
