@@ -116,6 +116,9 @@ def add_trac_to_project(application,
         privatetickets=False,
         tracwysiwyg=True,
         attachment_max_size=10485760,
+        milestones=[],
+        tickets=[],
+        project_name=u'',
         ):
 
     from penelope.core.models.dashboard import Project
@@ -315,7 +318,7 @@ def add_trac_to_project(application,
         tracenv.config.set('inherit', 'file', masterconfig)
 
     # set name and description
-    tracenv.config.set('project', 'name', getattr(application, 'project_name', u''))
+    tracenv.config.set('project', 'name', project_name)
     tracenv.config.set('project', 'descr', application.name)
 
     tracenv.config.set('notification', 'smtp_enabled', smtp_enabled and 'true' or 'false')
@@ -515,7 +518,6 @@ def add_trac_to_project(application,
     run([trac_path, 'config set browser color_scale True'])
 
     # add properly milestones
-    milestones = getattr(application, 'milestones', [])
     milestones.append({'title': 'Backlog', 'due_date': date.today().replace(year=date.today().year+1)})
 
     for milestone in milestones:
@@ -526,7 +528,6 @@ def add_trac_to_project(application,
         else:
             run([trac_path, 'milestone add "%s"' % milestone['title']])
 
-    tickets = getattr(application, 'tickets', [])
     tracenv = Environment(trac_path)
     for ticket in tickets:
         # in this moment the customer request has a proper id
@@ -534,14 +535,6 @@ def add_trac_to_project(application,
         t = Ticket(tracenv)
         t.populate(ticket)
         t.insert()
-
-    # i ruoli vengono assegnati dinamicamente interrogando la dashboard
-    # del progetto individuato da congif.por-dashboard.project_id
-    #
-    # for role, users in project.get_local_roles().items():
-    #     for user in users:
-    #         print "add role:%r to user:%r" % (role.lower(), user)
-    #         run([trac_path, "permission add %s %s" % (user, role.lower())])
 
     application.api_uri = 'trac://%s' % tracname
     application.trac_name = tracname

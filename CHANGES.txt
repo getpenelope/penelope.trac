@@ -1,7 +1,7 @@
 1.2.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- fix transaction handling when working with trac [amleczko]
 
 
 1.2.7 (2014-04-11)
