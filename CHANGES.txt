@@ -1,7 +1,7 @@
 1.2.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- fix current iteration report [amleczko]
 
 
 1.2.8 (2014-06-13)

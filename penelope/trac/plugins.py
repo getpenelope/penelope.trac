@@ -633,7 +633,6 @@ class CurrentIteration(Component):
 
         qry = DBSession().query(CustomerRequest)
         qry = qry.filter(CustomerRequest.project_id==project_id)
-        qry = qry.filter(CustomerRequest.placement==CustomerRequest.PLACEMENT_BOARD)
         qry = qry.filter(CustomerRequest.workflow_state.in_(['created', 'estimated']))
 
         query_params = {
