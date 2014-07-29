@@ -1,4 +1,4 @@
-1.2.10 (unreleased)
+1.2.10 (2014-07-29)
 -------------------
 
 - add stats_exclude custom field [amleczko]
