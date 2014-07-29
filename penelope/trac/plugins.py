@@ -209,6 +209,7 @@ class PorModifySimple(Component):
             ('fasesviluppo', ''),
             ('issuetype', ''),
             ('esogeno', hidden_cls),
+            ('stats_exclude', hidden_cls),
             ('version', hidden_cls),
             ('component', hidden_cls),
             ('blocking', hidden_cls),

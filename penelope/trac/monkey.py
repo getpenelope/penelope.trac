@@ -316,7 +316,7 @@ def fix_notification_props():
         for f in tkt.fields:
             fname = f['name']
 
-            if fname in ['summary', 'cc', 'time', 'changetime', 'qa1', 'qa2', 'sensitive', 'esogeno', 'customerrequest']:
+            if fname in ['summary', 'cc', 'time', 'changetime', 'qa1', 'qa2', 'sensitive', 'esogeno', 'customerrequest', 'stats_exclude']:
                 continue
 
             fval = tkt[fname] or ''

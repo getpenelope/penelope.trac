@@ -370,6 +370,9 @@ def add_trac_to_project(application,
         tracenv.config.set('ticket-custom', 'esogeno', 'checkbox')
         tracenv.config.set('ticket-custom', 'esogeno.label', 'Ticket aperto dal Cliente')
         tracenv.config.set('ticket-custom', 'esogeno.value', 'false')
+        tracenv.config.set('ticket-custom', 'stats_exclude', 'checkbox')
+        tracenv.config.set('ticket-custom', 'stats_exclude.label', 'Exclude from report stats')
+        tracenv.config.set('ticket-custom', 'stats_exclude.value', 'false')
         tracenv.config.set('ticket-custom', 'fasesviluppo', 'select')
         tracenv.config.set('ticket-custom', 'fasesviluppo.label', 'Fase sviluppo')
         tracenv.config.set('ticket-custom', 'fasesviluppo.options', '|'.join([u"",
