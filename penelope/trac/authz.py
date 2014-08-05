@@ -3,8 +3,10 @@
 
 from ConfigParser import ConfigParser
 
-from penelope.core.models import DBSession
-from penelope.core.models.dashboard import User, Subversion
+from zope.component import getMultiAdapter
+from penelope.core.dbsession import DBSession
+from penelope.core.security.acl import IRoleFinder
+from penelope.models import User, Subversion
 
 
 def repo_authz(repo, authz, users):
@@ -15,7 +17,7 @@ def repo_authz(repo, authz, users):
     if not authz.has_section(section):
         authz.add_section(section)
     for user in users:
-        roles = user.roles_in_context(repo.project).copy()
+        roles = getMultiAdapter((repo.project, user), IRoleFinder).get_roles().copy()
         acl = [(a.role_id, a.permission_name) for a in repo.acl]
         acl.append(('administrator', 'edit'))
         acl.append(('administrator', 'view'))

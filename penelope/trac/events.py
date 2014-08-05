@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import event
-from penelope.core.models.dashboard import Application
-from penelope.core.models.dashboard import modify_application_type, TRAC, SVN
+from penelope.models import Application
+from penelope.models import modify_application_type, TRAC, SVN
 from penelope.trac.populate import add_trac_to_project, add_svn_to_project
 
 

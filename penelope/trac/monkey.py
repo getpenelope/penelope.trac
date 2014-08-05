@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from penelope.core.models import DBSession
+from zope.component import getMultiAdapter
+from penelope.core.dbsession import DBSession
 from penelope.core.lib.helpers import unicodelower
+from penelope.core.security.acl import IRoleFinder
 
 log = logging.getLogger(__name__)
 
@@ -62,7 +64,7 @@ def fix_get_custom_fields():
 
     import copy
     from trac.ticket.api import TicketSystem
-    from penelope.core.models.dashboard import Project
+    from penelope.models import Project
 
     # TODO: cache ?
     # TODO: generalizzare
@@ -149,7 +151,7 @@ def fix_get_known_users():
     """
 
     from trac.env import Environment
-    from penelope.core.models.dashboard import Project, User
+    from penelope.models import Project, User
 
     # TODO: cache ?
     # TODO: esistono api piu' semplici su por per la stessa richiesta?
@@ -160,7 +162,7 @@ def fix_get_known_users():
             db = DBSession()
             project = db.query(Project).get(project_id)
             for user in db.query(User).all():
-                if user.roles_in_context(project):
+                if getMultiAdapter((project, user), IRoleFinder).get_roles():
                     yield user.login, user.fullname, user.email
 
     Environment.get_known_users = Environment_get_known_users
@@ -172,7 +174,7 @@ def fix_customer_request_changelog_description():
     """
 
     from trac.ticket.web_ui import TicketModule
-    from penelope.core.models.dashboard import CustomerRequest
+    from penelope.models import CustomerRequest
 
     _grouped_changelog_entries = TicketModule.grouped_changelog_entries
     def TicketModule_grouped_changelog_entries(self, ticket, db, when=None):
@@ -199,7 +201,7 @@ def fix_customer_request_dropdown():
     """
 
     from trac.ticket.web_ui import TicketModule
-    from penelope.core.models.dashboard import CustomerRequest
+    from penelope.models import CustomerRequest
 
     cr_order = ['estimated', 'created','scheduled', 'achieved', 'invoiced']
 

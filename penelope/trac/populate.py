@@ -12,7 +12,7 @@ from trac.env import Environment
 from trac.ticket.model import Ticket
 from trac.admin.console import run
 
-from penelope.core.models.dbsession import DBSession
+from penelope.core.dbsession import DBSession
 
 
 def get_reports(**kwargs):
@@ -59,7 +59,7 @@ REV="$2"
 
 
 def add_svn_to_project(application):
-    from penelope.core.models.dashboard import Project
+    from penelope.models import Project
 
     project = DBSession.query(Project).get(application.project_id)
     settings = get_current_registry().settings
@@ -121,7 +121,7 @@ def add_trac_to_project(application,
         project_name=u'',
         ):
 
-    from penelope.core.models.dashboard import Project
+    from penelope.models import Project
     
     project = DBSession.query(Project).get(application.project_id)
 

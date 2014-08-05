@@ -1,8 +1,11 @@
+from zope.component import getMultiAdapter
+
 from trac import core
 from trac.perm import IPermissionStore, DefaultPermissionStore, IPermissionGroupProvider
 
-from penelope.core.models import DBSession
-from penelope.core.models.dashboard import Project, User
+from penelope.core.security.acl import IRoleFinder
+from penelope.core.dbsession import DBSession
+from penelope.models import Project, User
 
  
 class PorPermissionStore(DefaultPermissionStore):
@@ -17,7 +20,7 @@ class PorPermissionStore(DefaultPermissionStore):
             project = DBSession().query(Project).get(project_id)
             user = DBSession().query(User).filter_by(email=username).first()
             if user:
-                return list(user.roles_in_context(context=project))
+                return list(getMultiAdapter((project, user), IRoleFinder).get_roles())
         return list() 
 
     # IPermissionStore
@@ -35,6 +38,6 @@ class PorPermissionStore(DefaultPermissionStore):
             project = DBSession().query(Project).get(project_id)
             user = DBSession().query(User).filter_by(email=username).first()
             if user:
-                for role in user.roles_in_context(context=project):
+                for role in getMultiAdapter((project, user), IRoleFinder).get_roles():
                     actions.update(set(super(PorPermissionStore, self).get_user_permissions(role)))
         return list(actions) 

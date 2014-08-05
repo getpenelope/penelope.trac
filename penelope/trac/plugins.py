@@ -42,10 +42,10 @@ from trac.notification import IEmailSender
 
 from penelope.core.fanstatic_resources import dashboard
 from penelope.core.fanstatic_resources import add_entry_from_ticket
-from penelope.core.models import DBSession
-from penelope.core.models.dashboard import CustomerRequest, Project, User
-from penelope.core.models.tp import TimeEntry
-from penelope.core.models.tp import timedelta_as_human_str
+from penelope.core.dbsession import DBSession
+from penelope.models import CustomerRequest, Project, User
+from penelope.models import TimeEntry
+from penelope.models import timedelta_as_human_str
 from genshi import Markup
 
 from penelope.trac.i18n import add_domains

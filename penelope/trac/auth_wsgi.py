@@ -7,8 +7,9 @@ from ConfigParser import ConfigParser
 from sqlalchemy.orm.exc import NoResultFound
 from time import time
 
-from penelope.core.models import DBSession, includeme
-from penelope.core.models.dashboard import User
+from penelope.core.dbsession import DBSession
+from penelope.models import includeme
+from penelope.models import User
 
 
 # TODO: sostituire con un config parser vero?
