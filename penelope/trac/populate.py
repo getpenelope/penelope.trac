@@ -22,11 +22,11 @@ def get_reports(**kwargs):
               """SELECT
                  t.id AS ticket
                  , t.summary
-                 , t.component 
-                 , t.version 
-                 , t.severity 
-                 , t.milestone 
-                 , t.status 
+                 , t.component
+                 , t.version
+                 , t.severity
+                 , t.milestone
+                 , t.status
                  , t.owner
                  , t.reporter
                  , t.time AS created
@@ -122,7 +122,7 @@ def add_trac_to_project(application,
         ):
 
     from penelope.core.models.dashboard import Project
-    
+
     project = DBSession.query(Project).get(application.project_id)
 
     settings = get_current_registry().settings or application.settings
@@ -161,12 +161,12 @@ def add_trac_to_project(application,
         'external_developer': ['developer'],
         'project_manager': ['administrator', 'TIME_ENTRY_ADD'],
     }
-    
+
 
     pordb = str(DBSession.bind.url)
     run([trac_path, 'initenv "%s" "%s?schema=trac_%s"' % (
-         tracname, 
-         pordb.replace('postgresql://', 'postgres://'), 
+         tracname,
+         pordb.replace('postgresql://', 'postgres://'),
          tracname)])
 
     tracenv = Environment(trac_path)
@@ -200,14 +200,14 @@ def add_trac_to_project(application,
         LEFT JOIN ticket_custom tc ON t.id = tc.ticket
         LEFT JOIN public.customer_requests cr ON tc.value = cr.id
         WHERE status <> ''closed''
-        AND tc.name = ''customerrequest'' 
+        AND tc.name = ''customerrequest''
         ORDER BY CAST(p.value AS int), milestone, t.type, time' where id=1;""")
     cursor.execute("""UPDATE report set query='
             SELECT p.value AS __color__,
                ''Milestone ''||milestone AS __group__,
-               t.id AS ticket, summary, t.type AS type, 
+               t.id AS ticket, summary, t.type AS type,
                cr.name AS CR,
-               owner, status, 
+               owner, status,
                time AS created,
                changetime AS _changetime, t.description AS _description,
                reporter AS _reporter
@@ -216,7 +216,7 @@ def add_trac_to_project(application,
             LEFT JOIN ticket_custom tc ON t.id = tc.ticket
             LEFT JOIN public.customer_requests cr ON tc.value = cr.id
             WHERE status <> ''closed''
-            AND tc.name = ''customerrequest'' 
+            AND tc.name = ''customerrequest''
             ORDER BY (milestone IS NULL),milestone, CAST(p.value AS int), t.type, time' where id=3;""")
     cursor.execute("""UPDATE report set query='
             SELECT p.value AS __color__,
@@ -243,7 +243,7 @@ def add_trac_to_project(application,
             LEFT JOIN ticket_custom tc ON t.id = tc.ticket
             LEFT JOIN public.customer_requests cr ON tc.value = cr.id
             WHERE status = ''accepted''
-            AND tc.name = ''customerrequest'' 
+            AND tc.name = ''customerrequest''
             ORDER BY owner, CAST(p.value AS int), t.type, time'
             where id=5;""")
     cursor.execute("""UPDATE report set query='
@@ -258,16 +258,16 @@ def add_trac_to_project(application,
             LEFT JOIN ticket_custom tc ON t.id = tc.ticket
             LEFT JOIN public.customer_requests cr ON tc.value = cr.id
             WHERE t.status <> ''closed'' AND owner = $USER
-            AND tc.name = ''customerrequest'' 
+            AND tc.name = ''customerrequest''
             ORDER BY (status = ''accepted'') DESC, CAST(p.value AS int), milestone, t.type, time'
             where id=7;""")
     cursor.execute("""UPDATE report set query='
             SELECT p.value AS __color__,
-           (CASE owner 
+           (CASE owner
             WHEN $USER THEN ''My Tickets''
                 ELSE ''Active Tickets''
             END) AS __group__,
-                t.id AS ticket, summary, milestone, t.type AS type, cr.name AS CR, 
+                t.id AS ticket, summary, milestone, t.type AS type, cr.name AS CR,
                 owner, status,
                 time AS created,
                 changetime AS _changetime, t.description AS _description,
@@ -348,7 +348,7 @@ def add_trac_to_project(application,
     tracenv.config.set('ticket-custom', 'blocking.label', 'Blocking')
     tracenv.config.set('ticket-custom', 'blockedby', 'text')
     tracenv.config.set('ticket-custom', 'blockedby.label', 'Blocked By')
-    # BBB: ii valori di customerrequest vengono caricati ondemand 
+    # BBB: ii valori di customerrequest vengono caricati ondemand
     tracenv.config.set('ticket-custom', 'customerrequest.options', '')
 
     # see ticket:80
@@ -361,12 +361,6 @@ def add_trac_to_project(application,
                                 u"design (grafica, layout...)",
                                 u"prestazioni",
                                 u"mi aspettavo che..."]))
-        tracenv.config.set('ticket-custom', 'qa1', 'select')
-        tracenv.config.set('ticket-custom', 'qa1.label', 'Verifica soluzione')
-        tracenv.config.set('ticket-custom', 'qa1.options', 'non attuata|attuata')
-        tracenv.config.set('ticket-custom', 'qa2', 'select')
-        tracenv.config.set('ticket-custom', 'qa2.label', 'Efficacia soluzione')
-        tracenv.config.set('ticket-custom', 'qa2.options', 'non efficace|efficace')
         tracenv.config.set('ticket-custom', 'esogeno', 'checkbox')
         tracenv.config.set('ticket-custom', 'esogeno.label', 'Ticket aperto dal Cliente')
         tracenv.config.set('ticket-custom', 'esogeno.value', 'false')
@@ -436,7 +430,7 @@ def add_trac_to_project(application,
     tracenv.config.set('components', 'tracrpc.xml_rpc.xmlrpcprotocol', 'enabled')
     tracenv.config.set('components', 'tracrpc.web_ui.rpcweb', 'enabled')
     tracenv.config.set('components', 'tracrpc.ticket.*', 'enabled')
-    
+
     # DynamicFields Plugin
     tracenv.config.set('components', 'dynfields.rules.*','enabled')
     tracenv.config.set('components', 'dynfields.web_ui.*','enabled')

@@ -204,8 +204,6 @@ class PorModifySimple(Component):
             ('cc', ''),
             ('keywords', ''),
             ('milestone', ''),
-            ('qa1', ''),
-            ('qa2', ''),
             ('fasesviluppo', ''),
             ('issuetype', ''),
             ('esogeno', hidden_cls),
@@ -382,7 +380,7 @@ class TicketRPC(Component):
         db = self.env.get_db_cnx()
         cursor = db.cursor()
         cursor.execute("SELECT id, resolution FROM ticket WHERE status='closed'")
-        
+
         resolution = {}
         for row in cursor:
             resolution[row[0]] = row[1]

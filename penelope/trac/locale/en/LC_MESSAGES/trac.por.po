@@ -49,14 +49,6 @@ msgstr "This ticket is private"
 msgid "trac_por_ticket_public"
 msgstr "This ticket can be accessed by the customer"
 
-#: trac/por/workflow.py:32
-msgid "trac_por_qa1_required"
-msgstr "Verification of resolution is required before closing this ticket."
-
-#: trac/por/workflow.py:35
-msgid "trac_por_qa2_required"
-msgstr "Assessment of solution efficacy is required before closing this ticket."
-
 #: trac/por/templates/admin-communication.html:9
 msgid "Communication Settings"
 msgstr ""

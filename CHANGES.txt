@@ -1,7 +1,7 @@
 1.2.11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- remove quality custom fields [amleczko]
 
 
 1.2.10 (2014-07-29)

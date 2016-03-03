@@ -282,7 +282,7 @@ def fix_filter_email_recipents():
             def has_sensisitive_perm(username):
                 return perm.get_user_permissions(username).get('SENSITIVE_VIEW')
             torecipients = filter(has_sensisitive_perm, torecipients)
-            ccrecipients = filter(has_sensisitive_perm, ccrecipients)            
+            ccrecipients = filter(has_sensisitive_perm, ccrecipients)
         # privatecomments
         if HAS_PRIVATECOMMENTS:
             privatecomment = False
@@ -300,7 +300,7 @@ def fix_filter_email_recipents():
                 ccrecipients = filter(has_privatecommente_perm, ccrecipients)
         return (torecipients, ccrecipients)
 
-    TicketNotifyEmail.get_recipients = TicketNotifyEmail_get_recipients 
+    TicketNotifyEmail.get_recipients = TicketNotifyEmail_get_recipients
 
 
 def fix_notification_props():
@@ -316,7 +316,7 @@ def fix_notification_props():
         for f in tkt.fields:
             fname = f['name']
 
-            if fname in ['summary', 'cc', 'time', 'changetime', 'qa1', 'qa2', 'sensitive', 'esogeno', 'customerrequest', 'stats_exclude']:
+            if fname in ['summary', 'cc', 'time', 'changetime', 'sensitive', 'esogeno', 'customerrequest', 'stats_exclude']:
                 continue
 
             fval = tkt[fname] or ''

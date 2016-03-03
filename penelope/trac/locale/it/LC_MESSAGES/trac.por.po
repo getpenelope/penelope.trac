@@ -49,14 +49,6 @@ msgstr "Il ticket è riservato ai developer e non visibile al cliente"
 msgid "trac_por_ticket_public"
 msgstr "Ticket condiviso con il cliente"
 
-#: trac/por/workflow.py:32
-msgid "trac_por_qa1_required"
-msgstr "Necessaria la verifica della soluzione prima della chiusura del ticket"
-
-#: trac/por/workflow.py:35
-msgid "trac_por_qa2_required"
-msgstr "Necessaria la verifica dell'efficacia della soluzione prima della chiusura del ticket"
-
 #: trac/por/templates/admin-communication.html:9
 msgid "Communication Settings"
 msgstr ""

@@ -31,14 +31,6 @@ class TicketWorkflowGuards(Component):
         if ticket['type'] == 'defect' and ticket['issuetype'] == '':
             errors.append(('issuetype', 'Devi specificare la natura del problema se si tratta di un difetto'))
 
-        if state == 'closed' and ticket['resolution'] in ('fixed',):
-            if ticket['qa1'] == 'non attuata':
-                # XXX i18n TODO errors.append(('qa1', _("trac_por_qa1_required")))
-                errors.append(('qa1', 'Necessaria la verifica della soluzione prima della chiusura del ticket'))
-            if ticket['qa2'] == 'non efficace':
-                # XXX i18n TODO errors.append(('qa2', _("trac_por_qa2_required")))
-                errors.append(('qa2', "Necessaria la verifica dell'efficacia della soluzione prima della chiusura del ticket"))
-
         return errors
 
     def _get_state(self, req, ticket):

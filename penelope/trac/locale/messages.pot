@@ -49,14 +49,6 @@ msgstr ""
 msgid "penelope.trac_ticket_public"
 msgstr ""
 
-#: penelope.trac/workflow.py:32
-msgid "penelope.trac_qa1_required"
-msgstr ""
-
-#: penelope.trac/workflow.py:35
-msgid "penelope.trac_qa2_required"
-msgstr ""
-
 #: penelope.trac/templates/admin-communication.html:9
 msgid "Communication Settings"
 msgstr ""
