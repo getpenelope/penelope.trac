@@ -47,7 +47,7 @@ def generate_authz(settings):
         ###
 
         [/]
-        * = 
+        * =
         @admin = rw
 
         ###
@@ -68,7 +68,7 @@ def generate_authz(settings):
     authz = ConfigParser()
     authz.read(svnauth_init)
 
-    users = db.query(User).all()
+    users = db.query(User).filter_by(active=True).all()
     for repo in db.query(Subversion).all():
         repo_authz(repo, authz, users)
 
